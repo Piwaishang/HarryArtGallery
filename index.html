@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Harry's Art Gallery</title>
+</head>
+<meta charset="utf-8"></meta>
+<body>
+    <p id="account">账号 My Account</p>
+    <p>艺术作品 Artwork Links</p>
+    <ul>
+        <li><p onclick="redirectlink('Compositions')" onmouseover="mouseOver('Compositions')" id="Compositions" >作曲作品 Compositions</p></li>
+        <li><p onclick="redirectlink('paintings')" onmouseover="mouseOver('Paintings')" id="Paintings" >美术作品 Paintings</p></li>
+
+    </ul>
+    <p>Search for artworks</p>
+    
+        <form id ="artworksearch" onmouseout="LoadPOST()">
+            <input type="text" id="artwork" name="artwork" value="artwork, author">
+            
+        </form>
+   
+    <p id="resultartworks"></p>
+    <div id="login">
+        <p>Login</p>
+        <form action="/Account" method="POST">
+
+            Username: <input type="text" name="username"><br>
+            Password: <input type="password" name="password">
+
+            <input type="submit" value="Submit">
+        </form>
+        <p>Signup</p>
+        <form action="/Account" method="POST">
+            First Name: <input type="text" name="first_name"> <br>
+            Last Name: <input type="text" name="last_name"><br>
+            Email: <input type="email" name="email"><br>
+            Username: <input type="text" name="username"><br>
+            Password: <input type="password" name="password">
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+
+
+
+</body>
+<style>
+    html {
+        font-family: 'Annie Use Your Telescope','Source Sans Pro','Fantasy','Din Alternate';
+        background-image: url('/千岛湖夏令营我有膝盖摔伤的经历1.JPG')
+    }
+    a:hover {
+        background-color: yellow;
+    }
+    div#login {
+        position: absolute;
+        top: 400px;
+        left: 0;
+        
+        border: 3px solid #73AD21;
+    }
+</style>
+
+
+
+
+</html>
+<script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.body.style.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    //document.getElementById("demo").addEventListener("mouseover", mouseOver);
+    //document.getElementById("demo").addEventListener("mouseout", mouseOut);
+    function mouseOver(id) {
+        document.getElementById(id).style.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+        //alert(str)
+    }
+
+    function mouseOut() {
+        document.getElementById(id).style.color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+    }
+
+    /*
+    function redirectlink(link) {
+        let response = await fetch("/"+link);
+        if (response.ok) {
+            let body = await response.text();
+            document.getElementById("resultartworks").innerHTML = body;
+        }
+    }
+    */
+    
+    /*
+    const form = document.getElementById("artworksearch")
+    alert(form.innerHTML);
+    form.addEventListener("submit", async (event) => {
+        alert(document.getElementById("artwork").textContent);
+        try {
+            let tag = document.getElementById("artwork").value;
+            alert("");
+            event.preventDefault();
+            let response = await fetch('/name?n='+tag);
+            if (response.ok) {
+                let body = await response.text();
+                document.getEnementById("resultartworks").innerHTML = body;
+            }
+            
+        } catch {
+
+        }
+
+
+    })*/
+    
+    /*
+    const form = document.getElementById("artworksearch");
+    form.addEventListener("submit", async (event) => {
+
+        const formData = new FormData(form);
+        event.preventDefault();
+        alert("");
+        
+        
+        const response = await fetch("/name", {
+            method: "POST",
+            body: formData,
+            
+
+        })
+        
+        document.getElementById("resultartworks").innerHTML = response.text();
+        
+
+    })
+    */
+</script>
+<script>
+    //var str = document.getElementById("demo").textContent;
+
+    async function LoadGET() {
+        const form = document.getElementById("artworksearch");
+        let tag = document.getElementById("artwork").value;
+        
+        let response = await fetch('/name?artwork=' + tag);
+        if (response.ok) {
+            let body = await response.text();
+            document.getElementById("resultartworks").innerHTML = body;
+        }
+    }
+    async function LoadPOST() {
+        
+        //var form = '<form action="/name" method="POST" id="artworksearch">'
+        
+        var form = document.getElementById("artworksearch");
+        //form += '</form>'
+        
+        const formData = new FormData();
+        var data = { "artwork": document.getElementById("artwork").value }
+        formData.append("json", JSON.stringify(data));
+        
+        // Display the values
+        /*
+        for (const value of formData.values()) {
+            alert(value);
+        }*/
+        //alert(formData.toString());
+        
+        event.preventDefault();
+        
+
+        try {
+            let response = await fetch("/name", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: { "Content-Type": "application/json" }
+
+            })
+            if (response.ok) {
+                let body = await response.text();
+                document.getElementById("resultartworks").innerHTML = body;
+            }
+        } catch {
+            alert("You cannot search now you have 404")
+        }
+        
+        
+    }
+    async function redirectlink(link) {
+        if (document.getElementById("account").textContent == "账号 My Account") {
+            window.location.href = "/" + link;
+        } else {
+
+            var username = document.getElementById("account").textContent.replace("Hello, ", "");
+            
+
+            var f = document.createElement('form');
+            f.action = '/'+link;
+            f.method = 'POST';
+            f.target = '_blank';
+
+            var i = document.createElement('input');
+            i.type = 'hidden';
+            i.name = 'username';
+            i.value = username;
+            f.appendChild(i);
+
+            document.body.appendChild(f);
+            f.submit();
+
+            /*
+            var username = document.getElementById("account").textContent.replace("Hello, ", "");
+            var data = { "username": username }
+            
+
+            
+            
+
+
+            try {
+                let response = await fetch("/"+link, {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: { "Content-Type": "application/json" }
+
+                })
+                if (response.ok) {
+                    let body = await response.text();
+                    document.getElementById("resultartworks").innerHTML = body;
+                }
+            } catch {
+                alert("You cannot search now you have 404")
+            }*/
+        }
+        
+    }
+    
+    
+</script>
