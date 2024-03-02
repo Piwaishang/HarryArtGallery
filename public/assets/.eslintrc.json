@@ -6,6 +6,7 @@
     "plugin:unicorn/recommended",
     "xo",
     "xo/browser"
+    
   ],
   "rules": {
     "capitalized-comments": "off",
